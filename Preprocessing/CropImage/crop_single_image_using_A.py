@@ -3,7 +3,7 @@ following functions utilize the albumentations library to crop a single image
 """
 
 import albumentations as A
-from yolo_formats.Preprocessing.CropImage.crop_utils import get_bbox_center
+from preprocess_yolo_data.Preprocessing.CropImage.crop_utils import get_bbox_center
 
 
 def create_transformer_and_crop_image(image, coords, format, bboxes, class_labels, label_fields='class_labels'):

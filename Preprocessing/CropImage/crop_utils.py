@@ -1,6 +1,6 @@
 import numpy as np
-from yolo_formats.LoadingData.load_utils import get_yolo_bboxes_from_txt_file
-from yolo_formats.default_param_configs import min_x_crop, min_y_crop #1280, 1280
+from preprocess_yolo_data.LoadingData.load_utils import get_yolo_bboxes_from_txt_file
+from preprocess_yolo_data.default_param_configs import min_x_crop, min_y_crop #1280, 1280
 
 
 def get_min_max_bbox_coords_from_bbox_arr(bbox_arr, min_x_crop=min_x_crop, min_y_crop=min_y_crop):
