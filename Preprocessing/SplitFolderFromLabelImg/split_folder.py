@@ -6,6 +6,7 @@ import os
 import shutil
 import random
 
+
 def split_folder(folder_path, output_folder, train_ratio=0.8, val_ratio=0.1, test_ratio=0.1):
     """
     Splits a folder into train, val, and Pinot-noir subdirectories.
@@ -62,6 +63,3 @@ def split_folder(folder_path, output_folder, train_ratio=0.8, val_ratio=0.1, tes
             shutil.copy(src_path, dst_path)
 
 
-folder_path = "/Volumes/ColesSSD/Pictures/Vineyard/Canopy/Pinot-Noir/images"
-output_folder = '/Users/cole/PycharmProjects/Forgit/yolo_formats/Preprocessing/SplitFolderFromLabelImg/Pinot-noir'
-split_folder(folder_path, output_folder)
