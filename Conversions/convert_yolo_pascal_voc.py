@@ -21,4 +21,3 @@ def convert_yolo_to_pascal_voc(img_size, yolo_box):
     return (box)
 
 
-lk
