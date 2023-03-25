@@ -2,8 +2,8 @@
 Example of our preprocess class
 """
 
-from yolo_formats.Preprocessing.CropImage.crop_images_from_dir import left_crop_from_center_and_bbox_dat, right_crop_from_center_and_bbox_dat
-from yolo_formats.Preprocessing.Preprocess.preprocess import Preprocess
+from preprocess_yolo_data.Preprocessing.CropImage.crop_images_from_dir import left_crop_from_center_and_bbox_dat, right_crop_from_center_and_bbox_dat
+from preprocess_yolo_data.Preprocessing.Preprocess.preprocess import Preprocess
 
 image_dir = "/Users/cole/PycharmProjects/Forgit/yolo_formats/Preprocessing/SplitFolderFromLabelImg/Pinot-noir/val/images"
 ann_dir = "/Users/cole/PycharmProjects/Forgit/yolo_formats/Preprocessing/SplitFolderFromLabelImg/Pinot-noir/val/labels"

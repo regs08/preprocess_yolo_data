@@ -48,7 +48,7 @@ def convert_text_lines_to_yolo_format(lines):
 #######
 Loading data into pascal voc format 
 """
-from yolo_formats.Conversions.convert_yolo_pascal_voc import convert_yolo_to_pascal_voc
+from preprocess_yolo_data.Conversions.convert_yolo_pascal_voc import convert_yolo_to_pascal_voc
 
 
 def load_coords_in_pascal_voc_from_yolo_txt_file(txt_path, img_path):

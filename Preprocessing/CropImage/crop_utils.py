@@ -1,5 +1,4 @@
 import numpy as np
-from preprocess_yolo_data.LoadingData.load_utils import get_yolo_bboxes_from_txt_file
 from preprocess_yolo_data.default_param_configs import min_x_crop, min_y_crop #1280, 1280
 
 

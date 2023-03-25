@@ -1,9 +1,9 @@
-import cv2
 import os
 import random
 from PIL import Image, ImageDraw
-
-
+import cv2
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 """
 ########
 Cropped images with bounding boxes
@@ -53,10 +53,6 @@ def plot_boxes_yolo_format(image, boxes, labels):
     cv2.imshow('image', image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
-
-
-import matplotlib.pyplot as plt
-import matplotlib.patches as patches
 
 
 def plot_bounding_boxes_pascal_voc_format(image_array, bboxes, labels):
@@ -174,8 +170,6 @@ def plot_random_image_with_yolo_annotations(image_folder, annotation_folder):
 Functions for colab 
 #######
 """
-import cv2
-import matplotlib.pyplot as plt
 
 
 def plot_image_with_boxes(image_path, label_path):
