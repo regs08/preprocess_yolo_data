@@ -65,7 +65,6 @@ def split_folder(folder_path, output_folder, train_ratio=0.8, val_ratio=0.1, tes
             shutil.copy(src_path, dst_path)
 
 
-
 def split_data_into_folders(data_list,
                             output_folder,
                             label_to_id_map=label_to_id_map,
@@ -123,5 +122,5 @@ def split_data_into_folders(data_list,
                       width = w / image.width
                       height = h / image.height
 
-                      f.write(f'{int(class_id)} {x_center:.6f} {y_center:.6f} {width:.6f} {height:.6f}\n')
+                      f.write(f'{int(class_id)} {x:.6f} {y:.6f} {w:.6f} {h:.6f}\n')
 
