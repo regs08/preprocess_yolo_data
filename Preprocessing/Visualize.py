@@ -172,6 +172,29 @@ Functions for colab
 """
 
 
+def plot_boxes_yolo_format_in_colab(image, boxes, labels):
+    from google.colab.patches import cv2_imshow
+
+    h, w, _ = image.shape
+    for box, label in zip(boxes, labels):
+        center_x, center_y, width, height = box
+        left = int((center_x - width/2) * w)
+        top = int((center_y - height/2) * h)
+        right = int((center_x + width/2) * w)
+        bottom = int((center_y + height/2) * h)
+        cv2.rectangle(image, (left, top), (right, bottom), (0, 255, 0), 2)
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        label_text = f"{label}"
+        label_size = cv2.getTextSize(label_text, font, 0.5, 2)[0]
+        cv2.rectangle(image, (left, top - label_size[1]), (left + label_size[0], top), (0, 255, 0), -1)
+        cv2.putText(image, label_text, (left, top), font, 0.5, (0, 0, 0), 2)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+    cv2_imshow(image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+
 def plot_image_with_boxes(image_path, label_path):
     # Load the image
     image = cv2.imread(image_path)
