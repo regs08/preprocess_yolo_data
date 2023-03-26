@@ -71,7 +71,19 @@ def split_data_into_folders(data_list,
                             train_ratio=0.8,
                             val_ratio=0.1,
                             test_ratio=0.1,
+                            normilize=False,
                             ):
+    """
+
+    :param data_list: list of dicts containing a PIL image, bbox data, class_labels, filename, file_prefix
+    :param output_folder: save folder
+    :param label_to_id_map: label_id map to map the labe
+    :param train_ratio: train split ratio
+    :param val_ratio: ..
+    :param test_ratio: ..
+    :param normilize: we assume the data is normilize e,g x_center/image_width set to True if not
+    :return:
+    """
     # Create the output folders
     for folder_name in ['train', 'val', 'test']:
         images_folder = os.path.join(output_folder, folder_name, 'images')
@@ -117,10 +129,11 @@ def split_data_into_folders(data_list,
                   for bbox, class_label in zip(bbox_data, class_labels):
                       class_id = label_to_id_map[class_label]
                       x, y, w, h = bbox
-                      x_center = (x + w/2) / image.width
-                      y_center = (y + h/2) / image.height
-                      width = w / image.width
-                      height = h / image.height
+                      if normilize:
+                          x = (x + w/2) / image.width
+                          y = (y + h/2) / image.height
+                          w = w / image.width
+                          h = h / image.height
 
                       f.write(f'{int(class_id)} {x:.6f} {y:.6f} {w:.6f} {h:.6f}\n')
 
