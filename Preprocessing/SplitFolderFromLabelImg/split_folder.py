@@ -108,7 +108,7 @@ def split_data_into_folders(data_list,
 
               # Save the image to the images folder
 
-              save_filename = data_dict['filename_prefix'] +'_'+ os.path.splitext(data_dict['file_name'])[0]
+              save_filename = data_dict['filename_prefix'] +'_'+ os.path.splitext(filename)[0]
               image_path = os.path.join(output_folder, folder_name, 'images', save_filename+ '.jpg')
               image.save(image_path)
 
