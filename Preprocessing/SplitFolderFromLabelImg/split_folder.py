@@ -23,7 +23,7 @@ def split_folder_into_train_val_test(folder_path, output_folder, train_ratio=0.8
     # create output folders
     train_folder = os.path.join(output_folder, 'train')
     val_folder = os.path.join(output_folder, 'val')
-    test_folder = os.path.join(output_folder, 'Pinot-noir')
+    test_folder = os.path.join(output_folder, 'test')
     for folder in [train_folder, val_folder, test_folder]:
         os.makedirs(os.path.join(folder, 'images'))
         os.makedirs(os.path.join(folder, 'labels'))
