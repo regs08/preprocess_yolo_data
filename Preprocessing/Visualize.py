@@ -218,4 +218,3 @@ def plot_image_with_boxes(image_path, label_path):
     plt.imshow(image)
     plt.axis('off')
     plt.show()
-
