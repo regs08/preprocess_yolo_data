@@ -50,9 +50,10 @@ def save_results_yolo_format(results, save_dir):
     path = os.path.join(save_dir, filename)
     with open(path, "w") as f:
         for i in range(num_predictions):
-            class_id = str(int(results.boxes.cls[i]))
-            bbox_yolo= results.boxes.xywhn[i].tolist()
-            bbox_yolo = [str(x) for x in bbox_yolo]
-            x,y,w,h = bbox_yolo
-            line = f'{class_id} {x} {y} {w} {h} \n'
+            #get label map from config
+            class_id = 'grape' #str(int(results.boxes.cls[i]))
+            bbox = results.boxes.xyxy[i].tolist()
+            bbox = [str(x) for x in bbox]
+            xmin,ymin,xmax,ymax = bbox
+            line = f'{class_id} {xmin} {ymin} {xmax} {ymax} \n'
             f.write(line)
