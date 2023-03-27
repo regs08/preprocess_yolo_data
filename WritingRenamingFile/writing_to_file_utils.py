@@ -30,10 +30,21 @@ def save_yolo_annotations(bboxes, labels, file_name, save_dir):
     yolo_file.close()
 
 
-def save_image(image, save_dir, filename):
-    # Create the full file path
-    filepath = os.path.join(save_dir, filename)
-
-    # Save the image to disk
-    image.save(filepath)
-
+def save_results_yolo_format(results, save_dir):
+    """
+    Save results in YOLO format
+    Args:
+        results (ultralytics.yolo.engine.results.Results): Results object from YOLO
+        save_dir (str): save_folder
+    """
+    num_predictions = len(results.boxes.xywhn)
+    filename = os.path.splitext(os.path.basename(results.path))[0] + '.txt'
+    path = os.path.join(save_dir, filename)
+    with open(path, "w") as f:
+        for i in range(num_predictions):
+            class_id = str(int(results.boxes.cls[i]))
+            bbox_yolo= results.boxes.xywhn[i].tolist()
+            bbox_yolo = [str(x) for x in bbox_yolo]
+            x,y,w,h = bbox_yolo
+            line = f'{class_id} {x} {y} {w} {h} \n'
+            f.write(line)
