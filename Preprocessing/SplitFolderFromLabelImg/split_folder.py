@@ -9,7 +9,7 @@ import numpy as np
 
 from preprocess_yolo_data.default_param_configs import label_to_id_map
 
-def split_folder(folder_path, output_folder, train_ratio=0.8, val_ratio=0.1, test_ratio=0.1):
+def split_folder_into_train_val_test(folder_path, output_folder, train_ratio=0.8, val_ratio=0.1, test_ratio=0.1):
     """
     Splits a folder into train, val, and Pinot-noir subdirectories.
 
