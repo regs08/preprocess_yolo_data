@@ -12,6 +12,14 @@ def insert_string_before_extension(file_path, string_to_insert):
     return new_file_name
 
 
+def save_image(image, save_dir, filename):
+    # Create the full file path
+    filepath = os.path.join(save_dir, filename)
+
+    # Save the image to disk
+    image.save(filepath)
+
+
 def save_yolo_annotations(bboxes, labels, file_name, save_dir):
 
     # Create a new file for YOLO annotations
