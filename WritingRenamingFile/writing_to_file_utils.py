@@ -1,4 +1,5 @@
 import os
+import yaml
 
 
 def insert_string_before_extension(file_path, string_to_insert):
@@ -57,3 +58,21 @@ def save_results_yolo_format(results, save_dir):
             xmin,ymin,xmax,ymax = bbox
             line = f'{class_id} {xmin} {ymin} {xmax} {ymax} \n'
             f.write(line)
+
+
+def write_data_yaml_file(DIRS, class_labels, outdir):
+    """
+    :param DIRS: dict containing our  train, val, test, paths
+    :param class_labels: class labels used for training
+    :param outdir: save dir for the yaml file
+    :return:
+    """
+
+    yaml_dict = {'train': DIRS['TRAIN'],
+                 'val': DIRS['VAL'],
+                 'test': DIRS['TEST'],
+                 'nc': len(class_labels),
+                 'names': class_labels}
+    yaml_path = os.path.join(outdir, 'data.yaml')
+    with open(yaml_path, 'w') as file:
+        documents = yaml.dump(yaml_dict, file)
