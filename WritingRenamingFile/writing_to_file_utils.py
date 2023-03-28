@@ -1,6 +1,6 @@
 import os
 import yaml
-
+from preprocess_yolo_data.default_param_configs import label_to_id_map
 
 def insert_string_before_extension(file_path, string_to_insert):
     # Get the file extension
@@ -52,7 +52,7 @@ def save_results_yolo_format(results, save_dir):
     with open(path, "w") as f:
         for i in range(num_predictions):
             #get label map from config
-            class_id = 'grape' #str(int(results.boxes.cls[i]))
+            class_id = label_to_id_map[str(int(results.boxes.cls[i]))]
             bbox = results.boxes.xyxy[i].tolist()
             bbox = [str(x) for x in bbox]
             xmin,ymin,xmax,ymax = bbox
