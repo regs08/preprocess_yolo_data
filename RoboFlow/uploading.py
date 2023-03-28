@@ -4,6 +4,18 @@ import glob
 
 
 def upload_images_anns_to_project_split(image_dir, ann_dir, upload_project, train_pct=1.0, val_pct=0.0, test_pct=0.0, ext='.jpg'):
+    """
+
+    :param image_dir: images
+    :param ann_dir: anns
+    :param upload_project: roboflow workspace object
+    :param train_pct: upload to train/val/test set
+    :param val_pct: upload to train/val/test set
+    :param test_pct: upload to train/val/test set
+    :param ext:
+    :return:
+    """
+
     # create image glob
     image_glob = glob.glob(os.path.join(image_dir, f'*{ext}'))
     n_images = len(image_glob)
