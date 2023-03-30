@@ -9,6 +9,7 @@ import numpy as np
 
 from preprocess_yolo_data.default_param_configs import label_to_id_map
 
+
 def split_folder_into_train_val_test(folder_path, output_folder, train_ratio=0.8, val_ratio=0.1, test_ratio=0.1):
     """
     Splits a folder into train, val, and Pinot-noir subdirectories.
@@ -59,10 +60,13 @@ def split_folder_into_train_val_test(folder_path, output_folder, train_ratio=0.8
             shutil.copy(src_path, dst_path)
 
             # move image file
-            image_file = file + '.JPG' # assuming images are in JPEG format
-            src_path = os.path.join(folder_path, image_file)
-            dst_path = os.path.join(folder_name, 'images', image_file)
-            shutil.copy(src_path, dst_path)
+            for ext in ['.jpg', '.png', '.PNG']:
+                image_file = file + ext
+                src_path = os.path.join(folder_path, image_file)
+                if os.path.exists(src_path):
+                    dst_path = os.path.join(folder_name, 'images', image_file)
+                    shutil.copy(src_path, dst_path)
+                    break  # break out of loop once the image is found and copied
     return train_folder, val_folder, test_folder
 
 
