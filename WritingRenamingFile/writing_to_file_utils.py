@@ -39,7 +39,7 @@ def save_yolo_annotations(bboxes, labels, file_name, save_dir):
     yolo_file.close()
 
 
-def save_results_yolo_format(results, save_dir):
+def save_results_yolo_format(results, save_dir, for_roboflow=False):
     """
     Save results in YOLO format
     note that the results will not have a class_id but rather the label. this is for uploading
@@ -54,7 +54,10 @@ def save_results_yolo_format(results, save_dir):
     with open(path, "w") as f:
         for i in range(num_predictions):
             #get label map from config
-            class_id = cat_id_map[int(results.boxes.cls[i])]
+            if for_roboflow:
+                class_id = cat_id_map[int(results.boxes.cls[i])]
+            else:
+                class_id = int(results.boxes.cls[i])
             bbox = results.boxes.xyxy[i].tolist()
             bbox = [str(x) for x in bbox]
             xmin,ymin,xmax,ymax = bbox
