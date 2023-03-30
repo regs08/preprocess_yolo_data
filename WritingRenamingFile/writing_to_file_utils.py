@@ -39,7 +39,7 @@ def save_yolo_annotations(bboxes, labels, file_name, save_dir):
     yolo_file.close()
 
 
-def save_results_xywhn(results, save_dir, for_roboflow=False):
+def save_results_xyxy(results, save_dir, for_roboflow=False):
     """
     Save results in YOLO format
     note that the results will not have a class_id but rather the label. this is for uploading
@@ -92,6 +92,8 @@ def save_results_yolo_format(results, save_dir):
 """
 yaml
 """
+
+
 def write_data_yaml_file(train_dir, val_dir, test_dir, class_labels, outdir):
     """
     :param DIRS: dict containing our  train, val, test, paths
