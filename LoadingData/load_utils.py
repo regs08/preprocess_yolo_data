@@ -135,3 +135,19 @@ def select_random_files(text_folder, image_folder):
 
     # Return the selected text file and image file
     return os.path.join(text_folder, selected_text_file), os.path.join(image_folder, selected_image_file)
+
+"""
+reading from yolo file 
+"""
+
+
+def extract_bounding_boxes(yolo_file):
+    with open(yolo_file, 'r') as f:
+        lines = f.readlines()
+
+    bounding_boxes = []
+    for line in lines:
+        class_id, x_center, y_center, width, height = map(float, line.split()[1:])
+        bounding_boxes.append((x_center, y_center, width, height))
+
+    return bounding_boxes
