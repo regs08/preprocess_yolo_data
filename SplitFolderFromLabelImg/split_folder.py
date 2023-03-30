@@ -63,6 +63,7 @@ def split_folder_into_train_val_test(folder_path, output_folder, train_ratio=0.8
             src_path = os.path.join(folder_path, image_file)
             dst_path = os.path.join(folder_name, 'images', image_file)
             shutil.copy(src_path, dst_path)
+    return train_folder, val_folder, test_folder
 
 
 def split_data_into_folders(data_list,
