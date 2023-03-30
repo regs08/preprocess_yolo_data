@@ -62,7 +62,7 @@ def save_results_yolo_format(results, save_dir):
             f.write(line)
 
 
-def write_data_yaml_file(DIRS, class_labels, outdir):
+def write_data_yaml_file(train_dir, val_dir, test_dir, class_labels, outdir):
     """
     :param DIRS: dict containing our  train, val, test, paths
     :param class_labels: class labels used for training
@@ -70,9 +70,9 @@ def write_data_yaml_file(DIRS, class_labels, outdir):
     :return:
     """
 
-    yaml_dict = {'train': DIRS['TRAIN'],
-                 'val': DIRS['VAL'],
-                 'test': DIRS['TEST'],
+    yaml_dict = {'train': train_dir,
+                 'val': val_dir,
+                 'test': test_dir,
                  'nc': len(class_labels),
                  'names': class_labels}
     yaml_path = os.path.join(outdir, 'data.yaml')
