@@ -12,10 +12,10 @@ def split_folder_into_train_val_test(folder_path, output_folder, train_ratio=0.8
 
     Arguments:
     folder_path -- the path to the folder to split
-    output_folder -- the path to the output folder where the train, val, and Pinot-noir subdirectories will be created
+    output_folder -- the path to the output folder where the train, val, (test) subdirectories will be created
     train_ratio -- the ratio of files to include in the train subdirectory (default 0.8)
     val_ratio -- the ratio of files to include in the validation subdirectory (default 0.1)
-    test_ratio -- the ratio of files to include in the Pinot-noir subdirectory (default 0.1)
+    test_ratio -- the ratio of files to include in the test subdirectory (default 0.1)
     """
     # create output folders
     train_folder = os.path.join(output_folder, 'train')
@@ -75,10 +75,9 @@ def split_data_into_folders(data_list,
                             normilize=False,
                             ):
     """
-
     :param data_list: list of dicts containing a PIL image, bbox data, class_labels, filename, file_prefix
     :param output_folder: save folder
-    :param label_to_id_map: label_id map to map the labe
+    :param label_to_id_map: label_id map to map the label
     :param train_ratio: train split ratio
     :param val_ratio: ..
     :param test_ratio: ..
@@ -192,3 +191,71 @@ def split_images_into_batches(source_folder, batch_size, destination_folder):
 
     return dest_folders
 
+import os
+import random
+import shutil
+
+
+def create_folder_structure(output_folder):
+    """
+    Creates the train and val subdirectories within the output folder,
+    as well as the images subdirectory within each subdirectory.
+    """
+    train_folder = os.path.join(output_folder, 'train')
+    val_folder = os.path.join(output_folder, 'val')
+    for folder in [train_folder, val_folder]:
+        os.makedirs(os.path.join(folder, 'images'))
+    return train_folder, val_folder
+
+
+def get_file_list(folder_path):
+    """
+    Returns a list of all the image files in the specified folder.
+    """
+    files = []
+    for filename in os.listdir(folder_path):
+        if filename.endswith('.jpg') or filename.endswith('.png') or filename.endswith('.JPG') or filename.endswith('.PNG'):
+            files.append(filename)
+    return files
+
+
+def split_file_list(file_list, train_ratio=0.8, val_ratio=0.2):
+    """
+    Splits the given file list into train and val sets based on the specified ratios.
+    """
+    random.shuffle(file_list)
+    num_files = len(file_list)
+    num_train = int(train_ratio * num_files)
+    num_val = num_files - num_train
+    train_files = file_list[:num_train]
+    val_files = file_list[num_train:]
+    return train_files, val_files
+
+
+def move_files(file_list, folder_path, folder_name):
+    """
+    Moves the files in the given file list from the source folder to the destination folder.
+    """
+    for file in file_list:
+        # move image file
+        src_path = os.path.join(folder_path, file)
+        dst_path = os.path.join(folder_name, 'images', file)
+        shutil.move(src_path, dst_path)
+
+
+def split_folder_into_train_val(image_folder, output_folder, train_ratio=0.8):
+    """
+    Splits an image folder into train and val subdirectories.
+
+    Arguments:
+    image_folder -- the path to the image folder to split
+    output_folder -- the path to the output folder where the train and val subdirectories will be created
+    train_ratio -- the ratio of files to include in the train subdirectory (default 0.8)
+    """
+    train_folder, val_folder = create_folder_structure(output_folder)
+    file_list = get_file_list(image_folder)
+    train_files, val_files = split_file_list(file_list, train_ratio=train_ratio)
+    move_files(train_files, image_folder, train_folder)
+    move_files(val_files, image_folder, val_folder)
+
+    return train_folder, val_folder
