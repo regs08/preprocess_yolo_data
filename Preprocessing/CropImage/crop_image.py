@@ -42,7 +42,6 @@ def split_image_vertically(image, **args):
 
     #Setting default value
     split_width = args.get('split_width', 1280)
-    print(args, split_width)
     # Load the image
     if isinstance(image, str):
         # Load the image if a path is provided
