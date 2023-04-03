@@ -1,15 +1,14 @@
-from preprocess_yolo_data.default_param_configs import cat_id_map
 from preprocess_yolo_data.Conversions.convert_yolo_pascal_voc import convert_yolo_to_pascal_voc
-from preprocess_yolo_data.LoadingData.load_utils import get_yolo_bboxes_from_txt_file
 from preprocess_yolo_data.Preprocessing.CropImage.crop_utils import get_min_max_bbox_coords_from_bbox_arr
 from preprocess_yolo_data.Preprocessing.CropImage.crop_single_image_using_A import \
     crop_height_wise_from_left_of_center, \
     crop_height_wise_from_right_of_center
+from preprocess_yolo_data.WritingRenamingFile.writing_to_file_utils import insert_string_before_extension
 
-import cv2
-import os
+
 import numpy as np
-
+import os
+from PIL import Image
 
 def left_crop_from_center_and_bbox_dat(img_arr, bboxes, class_labels):
     """
@@ -55,5 +54,31 @@ def right_crop_from_center_and_bbox_dat(img_arr, bboxes, class_labels):
                                                      image_arr=img_arr,
                                                      class_labels=class_labels)
     return right_crop
+
+
+def crop_split_images_in_folder(folder_path, save_folder, split_function, **args):
+    """
+
+    :param folder_path: where our images are stored
+    :param save_folder: save folder
+    :param split_function: function we split the images with, e.g vertically, center
+    :param args: any
+    :return:
+    """
+    # Get the list of image files in the folder
+    image_files = [f for f in os.listdir(folder_path) if f.endswith(".jpg") or f.endswith(".jpeg") or f.endswith(".png") or f.endswith(".JPG")]
+
+    # Loop through each image file and crop it vertically down the center
+    for file_name in image_files:
+        # Open the image file
+        image_path = os.path.join(folder_path, file_name)
+        split_images = split_function(image_path, **args)
+
+        # Save the split images with a number designating the split
+        for i, split_image in enumerate(split_images):
+            image_filename = insert_string_before_extension(os.path.basename(image_path), f'_{i}')
+            split_image_path = os.path.join(save_folder, image_filename)
+            split_image.save(split_image_path)
+
 
 
