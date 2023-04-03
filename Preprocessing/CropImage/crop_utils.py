@@ -29,6 +29,46 @@ def get_min_max_bbox_coords_from_bbox_arr(bbox_arr, min_x_crop=min_x_crop, min_y
     coords = [xmin, ymin, xmax, ymax]
     return coords
 
+"""
+Bounding box business 
+"""
+
+
+def check_cropped_image_for_min_pixel_value(min_x, min_y, max_x, max_y, min_pixel_value):
+
+    # Calculate the width and height of the cropped image
+    width = max_x - min_x
+    height = max_y - min_y
+
+    # Check if the width and height of the cropped image meet the minimum pixel value
+    if width < min_pixel_value:
+        min_x -= (min_pixel_value - width) // 2
+        max_x += (min_pixel_value - width + 1) // 2
+    if height < min_pixel_value:
+        min_y -= (min_pixel_value - height) // 2
+        max_y += (min_pixel_value - height + 1) // 2
+
+    return min_x, min_y, max_x, max_y
+
+
+def get_bbox_extremes(bboxes):
+    """
+    Given a list of bounding boxes (xmin, ymin, xmax, ymax), return the lowest xmin and ymin and highest xmax and ymax
+    across all the bounding boxes.
+
+    Args:
+    - bboxes: list of tuples representing bounding boxes in the format (xmin, ymin, xmax, ymax)
+
+    Returns:
+    - Tuple containing (lowest xmin, lowest ymin, highest xmax, highest ymax)
+    """
+    min_x = min([bbox[0] for bbox in bboxes])
+    min_y = min([bbox[1] for bbox in bboxes])
+    max_x = max([bbox[2] for bbox in bboxes])
+    max_y = max([bbox[3] for bbox in bboxes])
+
+    return (min_x, min_y, max_x, max_y)
+
 
 def get_bbox_center(bbox):
     """
