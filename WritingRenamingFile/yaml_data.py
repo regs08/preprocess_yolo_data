@@ -5,14 +5,16 @@ import os
 import yaml
 
 
-def write_data_yaml_file(train_dir, val_dir, test_dir, class_labels, outdir):
+def write_data_yaml_file(dataset_folder, class_labels, outdir):
     """
     :param DIRS: dict containing our  train, val, test, paths
     :param class_labels: class labels used for training
     :param outdir: save dir for the yaml file
     :return:
     """
-
+    train_dir = os.path.join(dataset_folder, 'train')
+    val_dir = os.path.join(dataset_folder,  'val')
+    test_dir = os.path.join(dataset_folder, 'test')
     yaml_dict = {'train': train_dir,
                  'val': val_dir,
                  'test': test_dir,
