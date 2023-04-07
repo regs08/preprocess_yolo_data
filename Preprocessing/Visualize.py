@@ -22,8 +22,12 @@ def plot_transformed_images(transformed, format):
     :return:
     """
     for t in transformed:
+        if t['class_labels']:
+            class_labels = t['class_labels']
+        else:
+            class_labels = t['category_ids']
 
-        image, bboxes, class_labels = t['image'], t['bboxes'], t['class_labels']
+        image, bboxes = t['image'], t['bboxes']
         if format=='yolo':
             plot_boxes_yolo_format(image, bboxes, class_labels)
         if format=='pascal_voc':
@@ -218,3 +222,35 @@ def plot_image_with_boxes(image_path, label_path):
     plt.imshow(image)
     plt.axis('off')
     plt.show()
+
+"""
+drawing on image
+"""
+
+
+import cv2
+import numpy as np
+
+def draw_vertical_lines(image, points, color=(0, 255, 0), thickness=25):
+    """
+    Draw vertical lines on an image at given point(s).
+
+    :param image: Image array or file path.
+    :type image: numpy.ndarray or str
+    :param points: List of points where vertical lines will be drawn. Each point is represented as (x, y) tuple.
+    :type points: list of tuples
+    :param color: Color of the lines in BGR format. Default is (0, 255, 0) (green).
+    :type color: tuple, optional
+    :param thickness: Thickness of the lines. Default is 1.
+    :type thickness: int, optional
+    :return: Image with vertical lines drawn.
+    :rtype: numpy.ndarray
+    """
+    if isinstance(image, str):
+        image = cv2.imread(image)
+
+    for point in points:
+        x, y = point
+        cv2.line(image, (x, 0), (x, image.shape[0]), color, thickness)
+    return image
+
