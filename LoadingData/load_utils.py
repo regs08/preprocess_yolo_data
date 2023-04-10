@@ -136,16 +136,13 @@ def get_annotation_path(image_path, ann_dir):
 
 
 def select_random_files(text_folder, image_folder):
-    # Get a list of all the text files in the text folder
-    text_files = [f for f in os.listdir(text_folder) if f.endswith('.txt')]
-
     # Get a list of all the image files in the image folder with valid extensions
     image_files = [f for f in os.listdir(image_folder) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]
 
     # Randomly select a text file and an image file
-    selected_text_file = random.choice(text_files)
     selected_image_file = random.choice(image_files)
-
+    selected_text_filename = os.path.splitext(os.path.basename(selected_image_file)[0]) + '.txt'
+    selected_text_file = os.path.join(text_folder, selected_text_filename)
     # Return the selected text file and image file
     return os.path.join(text_folder, selected_text_file), os.path.join(image_folder, selected_image_file)
 
