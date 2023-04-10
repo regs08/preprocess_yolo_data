@@ -17,7 +17,9 @@ def convert_yolo_to_pascal_voc(img_size, yolo_box):
     box[1] = y - (h / 2.0)
     box[2] = x + (w / 2.0)
     box[3] = y + (h / 2.0)
-
+    for b in box:
+        if b < 0:
+            b=0
     return (box)
 
 
