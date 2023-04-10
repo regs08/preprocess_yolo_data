@@ -3,8 +3,8 @@ import numpy as np
 def convert_yolo_to_pascal_voc(img_size, yolo_box):
     box = np.zeros(4)
 
-    dw = 1. / img_size[0]
-    dh = 1. / img_size[1]
+    dh = 1. / img_size[0]
+    dw = 1. / img_size[1]
 
     x,y,w,h = yolo_box
 
