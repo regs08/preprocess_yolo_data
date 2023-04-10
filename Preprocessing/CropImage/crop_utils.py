@@ -34,9 +34,10 @@ Bounding box business
 """
 
 
-def check_cropped_image_for_min_pixel_value(min_x, min_y, max_x, max_y, min_pixel_value):
+def check_bbox_extremes_for_min_pixel_value(bbox, min_pixel_value):
 
     # Calculate the width and height of the cropped image
+    min_x, min_y, max_x, max_y = bbox
     width = max_x - min_x
     height = max_y - min_y
 
@@ -45,10 +46,9 @@ def check_cropped_image_for_min_pixel_value(min_x, min_y, max_x, max_y, min_pixe
         min_x -= (min_pixel_value - width) // 2
         max_x += (min_pixel_value - width + 1) // 2
     if height < min_pixel_value:
-        min_y -= (min_pixel_value - height) // 2
-        max_y += (min_pixel_value - height + 1) // 2
-
-    return min_x, min_y, max_x, max_y
+        min_y -= round(min_pixel_value - height) // 2
+        max_y += round(min_pixel_value - height + 1) // 2
+    return (int(min_x), int(min_y), int(max_x), int(max_y))
 
 
 def get_bbox_extremes(bboxes):
@@ -68,6 +68,12 @@ def get_bbox_extremes(bboxes):
     max_y = max([bbox[3] for bbox in bboxes])
 
     return (min_x, min_y, max_x, max_y)
+
+
+def get_bbox_extreme_with_min_pixel_value(bboxes, min_pixel_value):
+    bbox_extremes = get_bbox_extremes(bboxes)
+    bbox_extremes_with_min_pixel_value = check_bbox_extremes_for_min_pixel_value(bbox_extremes, min_pixel_value)
+    return bbox_extremes_with_min_pixel_value
 
 
 def get_bbox_center(bbox):
