@@ -4,7 +4,7 @@ python file utilizing the crop utils to crop on a single image
 
 from PIL import Image
 from preprocess_yolo_data.Preprocessing.CropImage.crop_utils import get_bbox_extremes, \
-    check_cropped_image_for_min_pixel_value
+    check_bbox_extremes_for_min_pixel_value
 
 
 def crop_image_via_bbox_extremes(image_path, bboxes, min_pixel_value):
@@ -24,7 +24,7 @@ def crop_image_via_bbox_extremes(image_path, bboxes, min_pixel_value):
 
     # Get the lowest xmin, ymin and highest xmax, ymax from the bounding boxes
     min_x, min_y, max_x, max_y = get_bbox_extremes(bboxes)
-    min_x, min_y, max_x, max_y = check_cropped_image_for_min_pixel_value(min_x, min_y, max_x, max_y, min_pixel_value )
+    min_x, min_y, max_x, max_y = check_bbox_extremes_for_min_pixel_value(min_x, min_y, max_x, max_y, min_pixel_value)
     # Crop the image using the bbox extremes
     cropped_image = image.crop((min_x, min_y, max_x, max_y))
 
