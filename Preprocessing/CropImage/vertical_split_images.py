@@ -87,7 +87,7 @@ def vertical_split_with_intervals(img, intervals, bboxes, class_labels, **args):
     for i in range(len(intervals) -1):
         x_min = intervals[i]
         x_max =intervals[i+1]
-
+        if y_min < 0: ymin = 0
         split_image = vertical_split_with_A(img=img,
                                             x_min=x_min,
                                             x_max=x_max,
