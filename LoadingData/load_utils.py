@@ -10,13 +10,14 @@ import glob
 from preprocess_yolo_data.default_param_configs import image_exts
 
 
-def glob_image_files(image_folder):
+def glob_image_files(image_folder, exts=image_exts):
     image_paths = []
-    for ext in image_exts:
+    for ext in exts:
         # Use glob to search for files with the current extension
-        files = glob.glob(image_folder + '*' + ext)
+        files = glob.glob(os.path.join(image_folder,'*' + ext))
         # Extend the matching_files list with the found file paths
         image_paths.extend(files)
+
     return image_paths
 
 
