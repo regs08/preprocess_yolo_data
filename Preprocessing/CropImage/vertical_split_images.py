@@ -112,7 +112,7 @@ def save_images_from__list_of_A_dict(images, save_folder, min_boxes):
     :param save_folder:
     :return:
     """
-    print(f'Saving {len(images)} to ../{os.path.basename(save_folder)}')
+    print(f'Saving {len(images)} images(s) to ../{os.path.basename(save_folder)}')
     for img_dict in images:
         if len(img_dict['bboxes'])>= min_boxes:
             assert 'filename' in img_dict.keys(), 'save parameter is True. dict must contain filename'
