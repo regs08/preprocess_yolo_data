@@ -143,7 +143,7 @@ def split_images_in_folder(image_folder, interval, save_folder, ann_folder='',
     print(f'Splitting {len(image_paths)} image(s) in .../{os.path.basename(image_folder)}')
     for img_path in image_paths:
         img = cv2.imread(img_path)
-
+        print(img_path)
         #getting the coords for our vertical split for each image 
         split_intervals = get_split_points(img_path, interval)
 
