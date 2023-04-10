@@ -140,7 +140,7 @@ def split_images_in_folder(image_folder, interval, save_folder, ann_folder='',
         ann_folder=image_folder
 
     image_paths = glob_image_files(image_folder)
-    print(f'Splitting {len(image_paths)} image(s) in .../{os.path.basename(img_folder)}')
+    print(f'Splitting {len(image_paths)} image(s) in .../{os.path.basename(image_folder)}')
     for img_path in image_paths:
         img = cv2.imread(img_path)
 
