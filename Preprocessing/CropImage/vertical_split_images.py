@@ -143,7 +143,6 @@ def split_images_in_folder(image_folder, interval, save_folder, ann_folder='',
     print(f'Splitting {len(image_paths)} image(s) in .../{os.path.basename(image_folder)}')
     for img_path in image_paths:
         img = cv2.imread(img_path)
-        print(img_path)
         #getting the coords for our vertical split for each image 
         split_intervals = get_split_points(img_path, interval)
 
@@ -155,7 +154,7 @@ def split_images_in_folder(image_folder, interval, save_folder, ann_folder='',
         # instead of loading in the text file we can just load in bbox extremes here
         if bbox_extremes:
             p_voc_boxes = [convert_yolo_to_pascal_voc(img.shape, box) for box in bboxes]
-            _,y_min,_,y_max = get_bbox_extreme_with_min_pixel_value(p_voc_boxes, min_pixel_value)
+            _, y_min, _, y_max = get_bbox_extreme_with_min_pixel_value(p_voc_boxes, min_pixel_value)
             split_images = vertical_split_with_intervals(img=img_path,
                                                             bboxes=bboxes,
                                                             class_labels=class_ns,
