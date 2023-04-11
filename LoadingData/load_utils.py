@@ -141,10 +141,12 @@ def select_random_files(text_folder, image_folder):
 
     # Randomly select a text file and an image file
     selected_image_file = random.choice(image_files)
-    selected_text_filename = os.path.splitext(os.path.basename(selected_image_file)[0]) + '.txt'
+
+    selected_text_filename = os.path.splitext(os.path.basename(selected_image_file))[0] + '.txt'
     selected_text_file = os.path.join(text_folder, selected_text_filename)
     # Return the selected text file and image file
     return os.path.join(text_folder, selected_text_file), os.path.join(image_folder, selected_image_file)
+
 
 """
 reading from yolo file 
