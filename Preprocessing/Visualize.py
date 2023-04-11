@@ -1,9 +1,11 @@
 import os
 import random
 from PIL import Image, ImageDraw
-import cv2
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
+
+from preprocess_yolo_data.Preprocessing.CropImage.vertical_split_images import get_split_points
+
 """
 ########
 Cropped images with bounding boxes
@@ -22,7 +24,7 @@ def plot_transformed_images(transformed, format):
     :return:
     """
     for t in transformed:
-        if t['class_labels']:
+        if 'class_labels' in t.keys():
             class_labels = t['class_labels']
         else:
             class_labels = t['category_ids']
@@ -229,7 +231,7 @@ drawing on image
 
 
 import cv2
-import numpy as np
+
 
 def draw_vertical_lines(image, points, color=(0, 255, 0), thickness=25):
     """
@@ -254,3 +256,29 @@ def draw_vertical_lines(image, points, color=(0, 255, 0), thickness=25):
         cv2.line(image, (x, 0), (x, image.shape[0]), color, thickness)
     return image
 
+
+def draw_vertical_lines_at_interval(image, interval, color=(0, 255, 0), thickness=25):
+    """
+    Draw vertical lines on an image at every n number of pixels.
+
+    :param image: Image array or file path.
+    :type image: numpy.ndarray or str
+    :param interval: Interval in pixels at which lines will be drawn.
+    :type interval: int
+    :param color: Color of the lines in BGR format. Default is (0, 255, 0) (green).
+    :type color: tuple, optional
+    :param thickness: Thickness of the lines. Default is 1.
+    :type thickness: int, optional
+    :return: Image with vertical lines drawn at every n number of pixels.
+    :rtype: numpy.ndarray
+    """
+    if isinstance(image, str):
+        image = cv2.imread(image)
+
+    height, width, _ = image.shape
+    intervals = get_split_points(image, interval)
+
+    for x in intervals:
+
+        cv2.line(image, (x, 0), (x, height), color, thickness)
+    return image
