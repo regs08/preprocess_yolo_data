@@ -2,7 +2,7 @@
 dealing with saving from yolo.results object
 """
 
-from preprocess_yolo_data.default_param_configs import cat_id_map
+from yolo_data.default_param_configs import cat_id_map
 import os
 
 
