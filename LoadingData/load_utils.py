@@ -7,7 +7,7 @@ import numpy as np
 import os
 import random
 import glob
-from preprocess_yolo_data.default_param_configs import image_exts
+from yolo_data.default_param_configs import image_exts
 
 
 def glob_image_files(image_folder, exts=image_exts):
@@ -61,7 +61,7 @@ def convert_text_lines_to_yolo_format(lines):
 #######
 Loading data into pascal voc format 
 """
-from preprocess_yolo_data.Conversions.convert_yolo_pascal_voc import convert_yolo_to_pascal_voc
+from yolo_data.Conversions.convert_yolo_pascal_voc import convert_yolo_to_pascal_voc
 
 
 def load_coords_in_pascal_voc_from_yolo_txt_file(txt_path, img_path):
@@ -135,7 +135,7 @@ def get_annotation_path(image_path, ann_dir):
     return annotation_path
 
 
-def select_random_files(text_folder, image_folder):
+def select_random_files( image_folder, text_folder,):
     # Get a list of all the image files in the image folder with valid extensions
     image_files = [f for f in os.listdir(image_folder) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]
 
@@ -145,7 +145,7 @@ def select_random_files(text_folder, image_folder):
     selected_text_filename = os.path.splitext(os.path.basename(selected_image_file))[0] + '.txt'
     selected_text_file = os.path.join(text_folder, selected_text_filename)
     # Return the selected text file and image file
-    return os.path.join(text_folder, selected_text_file), os.path.join(image_folder, selected_image_file)
+    return os.path.join(image_folder, selected_image_file), os.path.join(text_folder, selected_text_file)
 
 
 """
