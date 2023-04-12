@@ -11,7 +11,7 @@ from yolo_data.SplittingFolders.utils import get_train_val_test_split_ratio
 
 def split_folder_into_train_val_test(folder_path, output_folder, train_ratio=0.8, val_ratio=0.1, test_ratio=0.1):
     """
-    Splits a folder into train, val, and Pinot-noir subdirectories.
+    Splits a folder into train, val, and test subdirectories.
 
     Arguments:
     folder_path -- the path to the folder to split
@@ -25,18 +25,18 @@ def split_folder_into_train_val_test(folder_path, output_folder, train_ratio=0.8
     train_folder, val_folder, test_folder = create_model_train_folder_structure(output_folder)
     # get list of files
     files =  glob_text_files(folder_path)
-
-    for filename in os.listdir(folder_path):
+    filenames = []
+    for filename in files:
         if filename == 'classes.txt':
             continue
         else:
-            files.append(filename[:-4]) # remove the extension
-
+            filenames.append(os.path.basename(filename)[:-4]) # remove the extension
+    print(filenames)
     # shuffle the files
-    random.shuffle(files)
+    random.shuffle(filenames)
 
     #splitting our data into with the given ratios..
-    train_files, val_files, test_files = get_train_val_test_split_ratio(files, train_ratio, val_ratio)
+    train_files, val_files, test_files = get_train_val_test_split_ratio(filenames, train_ratio, val_ratio)
 
     # move files to output folders
     for file_list, folder_name in [(train_files, train_folder), (val_files, val_folder), (test_files, test_folder)]:
@@ -256,3 +256,6 @@ def split_images_into_batches(source_folder, batch_size, destination_folder):
                 os.rmdir(folder_path)
 
     return dest_folders
+
+folder = "/Users/cole/PycharmProjects/Forgit/yolo_data/Preprocessing/CropImage/test_crop/test_images/save"
+split_folder_into_train_val_test(folder, folder)
