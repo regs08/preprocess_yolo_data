@@ -1,10 +1,12 @@
 import os
 import random
-from PIL import Image, ImageDraw
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
+import cv2
 
-from preprocess_yolo_data.Preprocessing.CropImage.vertical_split_images import get_split_points
+
+from yolo_data.LoadingData.load_utils import get_yolo_bboxes_from_txt_file
+from yolo_data.Preprocessing.VerticalSplit.vertical_split_images import get_split_points
 
 """
 ########
@@ -39,26 +41,25 @@ def plot_transformed_images(transformed, format):
 
 
 def plot_boxes_yolo_format(image, boxes, labels):
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-
+    fig, ax = plt.subplots(1)
+    ax.imshow(image)
     h, w, _ = image.shape
+
     for box, label in zip(boxes, labels):
         center_x, center_y, width, height = box
-        left = int((center_x - width/2) * w)
-        top = int((center_y - height/2) * h)
-        right = int((center_x + width/2) * w)
-        bottom = int((center_y + height/2) * h)
-        cv2.rectangle(image, (left, top), (right, bottom), (0, 255, 0), 2)
-        font = cv2.FONT_HERSHEY_SIMPLEX
-        label_text = f"{label}"
-        label_size = cv2.getTextSize(label_text, font, 0.5, 2)[0]
-        cv2.rectangle(image, (left, top - label_size[1]), (left + label_size[0], top), (0, 255, 0), -1)
-        cv2.putText(image, label_text, (left, top), font, 0.5, (0, 0, 0), 2)
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        xmin = int((center_x - width/2) * w)
+        ymin = int((center_y - height/2) * h)
+        xmax = int((center_x + width/2) * w)
+        ymax = int((center_y + height/2) * h)
 
-    cv2.imshow('image', image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+        rect = patches.Rectangle((xmin, ymin), xmax - xmin, ymax - ymin, linewidth=2, edgecolor='g', facecolor='none')
+        ax.add_patch(rect)
+
+        label_text = f"{label}"
+        ax.text(xmin, ymin - 10, label_text, fontsize=12, color='g', backgroundcolor='w')
+
+    plt.axis('off')
+    plt.show()
 
 
 def plot_bounding_boxes_pascal_voc_format(image_array, bboxes, labels):
@@ -131,6 +132,7 @@ def plot_image_with_bboxes_albumentations_format(image_array, bboxes, labels):
 
     # Show the plot
     plt.show()
+
 """
 ########
 Plotting random example 
@@ -138,7 +140,8 @@ Plotting random example
 """
 
 
-def plot_random_image_with_yolo_annotations(image_folder, annotation_folder):
+def plot_random_image_with_yolo_annotations(image_folder, annotation_folder, format='yolo'):
+    #format is assumed to be in yolo..
     # Get a list of all image files in the folder
     image_files = [f for f in os.listdir(image_folder) if
                    f.endswith(('.jpg', '.jpeg', '.JPG', '.JPEG', '.png', '.PNG'))]
@@ -149,30 +152,11 @@ def plot_random_image_with_yolo_annotations(image_folder, annotation_folder):
 
     # Read in the image and its corresponding annotation file
     image_path = os.path.join(image_folder, selected_image_file)
-    image = Image.open(image_path)
-    annotation_path = os.path.join(annotation_folder, selected_annotation_file)
-    with open(annotation_path, 'r') as f:
-        annotations = f.readlines()
-
-    # Create a drawing object to draw the bounding boxes on the image
-    draw = ImageDraw.Draw(image)
-
-    # Loop through each annotation and draw its bounding box on the image
-    for annotation in annotations:
-        # Parse the annotation to get the label and bounding box coordinates
-        label, x_center, y_center, width, height = annotation.strip().split()
-        x_min = int(float(x_center) * image.width - float(width) * image.width / 2)
-        y_min = int(float(y_center) * image.height - float(height) * image.height / 2)
-        x_max = int(float(x_center) * image.width + float(width) * image.width / 2)
-        y_max = int(float(y_center) * image.height + float(height) * image.height / 2)
-
-        # Draw the bounding box on the image
-        draw.rectangle([x_min, y_min, x_max, y_max], outline='red')
-
-    # Show the image with bounding boxes drawn
-    image.show()
+    ann_path = os.path.join(annotation_folder, selected_annotation_file)
+    plot_image_with_boxes(image_path, ann_path)
 
 """
+#######
 Functions for colab 
 #######
 """
@@ -207,13 +191,11 @@ def plot_image_with_boxes(image_path, label_path):
     # Convert the image from BGR to RGB for Matplotlib
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
-    # Load the labels from the YOLO-formatted text file
-    with open(label_path, 'r') as f:
-        labels = f.readlines()
+    bboxes, class_ids = get_yolo_bboxes_from_txt_file(label_path)
 
     # Parse the label data and draw the boxes
-    for label in labels:
-        class_id, x_center, y_center, width, height = [float(x) for x in label.strip().split()]
+    for box in bboxes:
+        x_center, y_center, width, height = box
         x_min = int((x_center - width / 2) * image.shape[1])
         y_min = int((y_center - height / 2) * image.shape[0])
         x_max = int((x_center + width / 2) * image.shape[1])
@@ -225,12 +207,10 @@ def plot_image_with_boxes(image_path, label_path):
     plt.axis('off')
     plt.show()
 
-"""
-drawing on image
-"""
 
-
-import cv2
+"""
+drawing vertical lines on image
+"""
 
 
 def draw_vertical_lines(image, points, color=(0, 255, 0), thickness=25):
