@@ -31,7 +31,7 @@ def split_folder_into_train_val_test(folder_path, output_folder, train_ratio=0.8
             continue
         else:
             filenames.append(os.path.basename(filename)[:-4]) # remove the extension
-    print(filenames)
+
     # shuffle the files
     random.shuffle(filenames)
 
