@@ -1,9 +1,9 @@
-from preprocess_yolo_data.WritingRenamingFile.writing_to_file_utils import insert_string_before_extension,\
+from yolo_data.WritingRenamingFile.writing_to_file_utils import insert_string_before_extension,\
     save_yolo_annotations
-from preprocess_yolo_data.LoadingData.load_utils import glob_image_files, get_annotation_path
-from preprocess_yolo_data.Conversions.convert_yolo_pascal_voc import convert_yolo_to_pascal_voc
-from preprocess_yolo_data.Preprocessing.CropImage.crop_utils import get_bbox_extreme_with_min_pixel_value
-from preprocess_yolo_data.LoadingData.load_utils import get_yolo_bboxes_from_txt_file
+from yolo_data.LoadingData.load_utils import glob_image_files, get_annotation_path
+from yolo_data.Conversions.convert_yolo_pascal_voc import convert_yolo_to_pascal_voc
+from yolo_data.Preprocessing.CropImage.crop_utils import get_bbox_extreme_with_min_pixel_value
+from yolo_data.LoadingData.load_utils import get_yolo_bboxes_from_txt_file
 
 
 import cv2
