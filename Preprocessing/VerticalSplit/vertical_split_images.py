@@ -1,40 +1,18 @@
-from yolo_data.WritingRenamingFile.writing_to_file_utils import insert_string_before_extension,\
-    save_yolo_annotations
+from yolo_data.WritingRenamingFile.writing_to_file_utils import insert_string_before_extension
 from yolo_data.LoadingData.load_utils import glob_image_files, get_annotation_path
 from yolo_data.Conversions.convert_yolo_pascal_voc import convert_yolo_to_pascal_voc
 from yolo_data.Preprocessing.CropImage.crop_utils import get_bbox_extreme_with_min_pixel_value
 from yolo_data.LoadingData.load_utils import get_yolo_bboxes_from_txt_file
-
+from yolo_data.Preprocessing.VerticalSplit.utils import get_split_points, save_images_from__list_of_A_dict
 
 import cv2
 import albumentations as A
 from PIL import Image
 import os
 
-
-def get_split_points(image, interval):
-    if isinstance(image, str):
-        image = cv2.imread(image)
-
-    height, width, _ = image.shape
-
-    # if theres a remainder we subtract the last line
-    num_lines = (width // interval) -1  if (width // interval) > 0 else 0
-    #for the first value of xmin for our splits
-    intervals = [0]
-
-    # Draw vertical lines at every n number of pixels until step > width
-    if num_lines > 0:
-        x = interval
-        for i in range(num_lines):
-            intervals.append(x)
-            x += interval
-
-    # appending image with for the last split
-    intervals.append(width)
-    return intervals
-
-
+"""
+Splitting single images 
+"""
 def vertical_split_with_A(img, x_min, x_max,y_min, y_max, bboxes, class_labels, format):
     """
     takes in an image and returns a
@@ -103,22 +81,9 @@ def vertical_split_with_intervals(img, intervals, bboxes, class_labels, **args):
         split_images.append(split_image)
     return split_images
 
-
-def save_images_from__list_of_A_dict(images, save_folder, min_boxes):
-    """
-    iterates throught the splits of one image, checks to see if our image has a bounding and filename if it does
-    it gets saved
-    :param images:
-    :param save_folder:
-    :return:
-    """
-    print(f'Saving {len(images)} images(s) to ../{os.path.basename(save_folder)}')
-    for img_dict in images:
-        if len(img_dict['bboxes'])>= min_boxes:
-            assert 'filename' in img_dict.keys(), 'save parameter is True. dict must contain filename'
-            save_path = os.path.join(save_folder, img_dict['filename'])
-            img_dict['image'].save(save_path)
-            save_yolo_annotations(img_dict['bboxes'], img_dict['category_ids'], img_dict['filename'], save_folder)
+"""
+Splitting images in folder 
+"""
 
 
 def split_images_in_folder(image_folder, interval, save_folder, ann_folder='',
