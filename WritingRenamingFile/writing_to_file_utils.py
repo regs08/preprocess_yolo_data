@@ -37,3 +37,16 @@ def save_yolo_annotations(bboxes, labels, file_name, save_dir):
     # Close the YOLO annotation file
     yolo_file.close()
 
+
+"""
+folder structures
+"""
+
+def create_model_train_folder_structure(output_folder):
+    train_folder = os.path.join(output_folder, 'train')
+    val_folder = os.path.join(output_folder, 'val')
+    test_folder = os.path.join(output_folder, 'test')
+    for folder in [train_folder, val_folder, test_folder]:
+        os.makedirs(os.path.join(folder, 'images'))
+        os.makedirs(os.path.join(folder, 'labels'))
+    return train_folder, val_folder, test_folder
