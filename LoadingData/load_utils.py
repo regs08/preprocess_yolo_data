@@ -1,5 +1,5 @@
 """
-Utility functions for reading yolo text files 
+Utility functions for reading from files
 
 """
 import cv2
@@ -7,7 +7,18 @@ import numpy as np
 import os
 import random
 import glob
+
 from yolo_data.default_param_configs import image_exts
+from yolo_data.Conversions.convert_yolo_pascal_voc import convert_yolo_to_pascal_voc
+
+
+"""
+globbing paths 
+"""
+
+
+def glob_text_files(ann_folder, ext='.txt'):
+    return glob.glob(os.path.join(ann_folder, '*' + ext))
 
 
 def glob_image_files(image_folder, exts=image_exts):
@@ -21,47 +32,9 @@ def glob_image_files(image_folder, exts=image_exts):
     return image_paths
 
 
-def get_yolo_bboxes_from_txt_file(txt_path):
-    """
-    gets each line as a seperate bbox
-    :param txt_file: the text file corresponding to the image
-    :return:
-    """
-    lines = read_txt_file(txt_path)
-    yolo_bboxes, class_ns = convert_text_lines_to_yolo_format(lines)
-
-    return yolo_bboxes, class_ns
-
-
-def read_txt_file(txt_path):
-    txt_file = open(txt_path, "r")
-    lines = txt_file.read().splitlines()
-    return lines
-
-
-def convert_text_lines_to_yolo_format(lines):
-    bboxes = []
-    class_ns = []
-    for idx, line in enumerate(lines):
-        value = line.split()
-        x = y = w = h = cls = None
-        cls = int(value[0])
-        x = float(value[1])
-        y = float(value[2])
-        w = float(value[3])
-        h = float(value[4])
-
-
-        bboxes.append([x,y,w,h])
-        class_ns.append(cls)
-
-    return bboxes, class_ns
-
 """
-#######
 Loading data into pascal voc format 
 """
-from yolo_data.Conversions.convert_yolo_pascal_voc import convert_yolo_to_pascal_voc
 
 
 def load_coords_in_pascal_voc_from_yolo_txt_file(txt_path, img_path):
@@ -79,24 +52,9 @@ def load_coords_in_pascal_voc_from_yolo_txt_file(txt_path, img_path):
 
     return np.asarray(pascal_voc_boxes), class_ns
 
-
-def load_image_filenames_from_folder(folder_path):
-    """
-    Load filenames of image files with extensions .jpg, .png, and .jpeg from a folder.
-
-    Args:
-        folder_path (str): The path to the folder containing the images.
-
-    Returns:
-        A list of image file names.
-    """
-    allowed_extensions = ['.jpg', '.png', '.jpeg']
-    image_filenames = []
-    for filename in os.listdir(folder_path):
-        if any(filename.lower().endswith(ext) for ext in allowed_extensions):
-            image_path = os.path.join(folder_path, filename)
-            image_filenames.append(image_path)
-    return image_filenames
+"""
+loading anns from image paths 
+"""
 
 
 def get_annotation_paths(image_paths, ann_dir):
@@ -135,22 +93,45 @@ def get_annotation_path(image_path, ann_dir):
     return annotation_path
 
 
-def select_random_files( image_folder, text_folder,):
-    # Get a list of all the image files in the image folder with valid extensions
-    image_files = [f for f in os.listdir(image_folder) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]
-
-    # Randomly select a text file and an image file
-    selected_image_file = random.choice(image_files)
-
-    selected_text_filename = os.path.splitext(os.path.basename(selected_image_file))[0] + '.txt'
-    selected_text_file = os.path.join(text_folder, selected_text_filename)
-    # Return the selected text file and image file
-    return os.path.join(image_folder, selected_image_file), os.path.join(text_folder, selected_text_file)
-
-
 """
 reading from yolo file 
 """
+
+def get_yolo_bboxes_from_txt_file(txt_path):
+    """
+    gets each line as a seperate bbox
+    :param txt_file: the text file corresponding to the image
+    :return:
+    """
+    lines = read_txt_file(txt_path)
+    yolo_bboxes, class_ns = convert_text_lines_to_yolo_format(lines)
+
+    return yolo_bboxes, class_ns
+
+
+def read_txt_file(txt_path):
+    txt_file = open(txt_path, "r")
+    lines = txt_file.read().splitlines()
+    return lines
+
+
+def convert_text_lines_to_yolo_format(lines):
+    bboxes = []
+    class_ns = []
+    for idx, line in enumerate(lines):
+        value = line.split()
+        x = y = w = h = cls = None
+        cls = int(value[0])
+        x = float(value[1])
+        y = float(value[2])
+        w = float(value[3])
+        h = float(value[4])
+
+
+        bboxes.append([x,y,w,h])
+        class_ns.append(cls)
+
+    return bboxes, class_ns
 
 
 def extract_bounding_boxes(yolo_file):
@@ -163,3 +144,20 @@ def extract_bounding_boxes(yolo_file):
         bounding_boxes.append((x_center, y_center, width, height))
 
     return bounding_boxes
+
+
+"""
+Selecting random files 
+"""
+
+def select_random_files(image_folder, text_folder):
+    # Get a list of all the image files in the image folder with valid extensions
+    image_files = glob_image_files(image_folder)
+
+    # Randomly select a text file and an image file
+    selected_image_file = random.choice(image_files)
+
+    selected_text_filename = os.path.splitext(os.path.basename(selected_image_file))[0] + '.txt'
+    selected_text_file = os.path.join(text_folder, selected_text_filename)
+    # Return the selected text file and image file
+    return os.path.join(image_folder, selected_image_file), os.path.join(text_folder, selected_text_file)
