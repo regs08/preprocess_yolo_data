@@ -45,10 +45,10 @@ def load_coords_in_pascal_voc_from_yolo_txt_file(txt_path, img_path):
     :return:
     """
     yolo_boxes, class_ns = get_yolo_bboxes_from_txt_file(txt_path)
-    img_h, img_w = cv2.imread(img_path).shape[:2]
+    img = cv2.imread(img_path).shape[:2]
 
     #note the switching of height and width
-    pascal_voc_boxes = [convert_yolo_to_pascal_voc((img_w, img_h), yolo_b) for yolo_b in yolo_boxes]
+    pascal_voc_boxes = [convert_yolo_to_pascal_voc(img, yolo_b) for yolo_b in yolo_boxes]
 
     return np.asarray(pascal_voc_boxes), class_ns
 
