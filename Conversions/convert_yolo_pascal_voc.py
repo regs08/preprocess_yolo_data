@@ -1,25 +1,16 @@
-import numpy as np
 
-def convert_yolo_to_pascal_voc(img_size, yolo_box):
-    box = np.zeros(4)
 
-    dh = 1. / img_size[0]
-    dw = 1. / img_size[1]
 
-    x,y,w,h = yolo_box
-
-    x = x / dw
-    w = w / dw
-    y = y / dh
-    h = h / dh
-
-    box[0] = x - (w / 2.0)
-    box[1] = y - (h / 2.0)
-    box[2] = x + (w / 2.0)
-    box[3] = y + (h / 2.0)
-    for b in box:
-        if b < 0:
-            b=0
-    return (box)
+def convert_yolo_to_pascal_voc(image, yolo_box, normilized=True):
+    h, w, _ = image.shape
+    boxes = []
+    for box in yolo_box:
+        center_x, center_y, width, height = box
+        xmin = int((center_x - width/2) * w)
+        ymin = int((center_y - height/2) * h)
+        xmax = int((center_x + width/2) * w)
+        ymax = int((center_y + height/2) * h)
+        boxes.append([xmin, ymin, xmax, ymax])
+    return boxes
 
 
