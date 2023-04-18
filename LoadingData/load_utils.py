@@ -71,7 +71,9 @@ def get_annotation_paths(image_paths, ann_dir):
     """
     annotation_paths = []
     for image_path in image_paths:
-        annotation_paths.append(get_annotation_path(image_path, ann_dir))
+        ann_path = get_annotation_path(image_path, ann_dir)
+        assert os.path.exists(ann_path), f'PATH: {ann_path} \nDOES NOT EXIST'
+        annotation_paths.append(ann_path)
     return annotation_paths
 
 
