@@ -38,9 +38,45 @@ def save_yolo_annotations(bboxes, labels, file_name, save_dir):
     yolo_file.close()
 
 
+def write_lines_to_file(filename, lines):
+    with open(filename, 'w') as f:
+        for line in lines:
+            f.write(line + '\n')
+
+
+"""
+writing as yolo with segmentation 
+"""
+
+def yolo_format_line(class_label, bbox, segmentation):
+    # Extract normalized bounding box coordinates in YOLO format
+    #assumes the segmentation is a flattend list [x,y,x1,y1...xn,yn]
+    x_center, y_center, width, height = bbox
+
+    # Create YOLO-formatted line
+    line = f"{class_label} {x_center:.6f} {y_center:.6f} {width:.6f} {height:.6f}"
+
+    # Add normalized segmentation data
+    segmentation_str = " ".join(str(x) for x in segmentation)
+    line += " " + segmentation_str
+
+    return line
+
+
+def prepare_and_write_to_yolo(class_id, bbox, segmentation, filepath):
+  """
+  prepares our segmentation, flattens it, and creates our lines to write to the filepath
+  """
+  flat_seg = [float(coord) for tup in segmentation for coord in tup]
+  lines = []
+  lines.append(yolo_format_line(class_id, bbox, flat_seg))
+  write_lines_to_file(filepath, lines)
+  return lines, filepath
+
 """
 folder structures
 """
+
 
 def create_model_train_folder_structure(output_folder):
     train_folder = os.path.join(output_folder, 'train')
