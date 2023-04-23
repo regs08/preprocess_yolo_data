@@ -262,3 +262,67 @@ def draw_vertical_lines_at_interval(image, interval, color=(0, 255, 0), thicknes
 
         cv2.line(image, (x, 0), (x, height), color, thickness)
     return image
+
+"""
+plotting yolo instance segmentation 
+"""
+
+
+def plot_image_with_annotations(image_path, annotation_path):
+    """
+    Load an image and its annotations (bounding box and segmentation) in YOLO format,
+    and plot the image with the annotations overlaid on top.
+
+    Args:
+        image_path (str): The path to the input image file.
+        annotation_path (str): The path to the annotation file in YOLO format.
+
+    Returns:
+        None.
+    """
+    # Load the image
+    image = cv2.imread(image_path)
+
+    # Load the annotations
+    with open(annotation_path, 'r') as f:
+        annotation = f.readline().strip().split(' ')
+        class_label = int(annotation[0])
+        bbox_norm = np.array([float(x) for x in annotation[1:5]])
+        segmentation_norm = np.array([float(x) for x in annotation[5:]])
+
+    # Convert normalized bbox to pixel coordinates
+    h, w, _ = image.shape
+    bbox = bbox_norm * np.array([w, h, w, h])
+    bbox = np.array([bbox[0], bbox[1], bbox[2], bbox[3]])
+
+    # Convert normalized segmentation points to pixel coordinates
+    segmentation = segmentation_norm.reshape(-1, 2) * np.array([w, h])
+    segmentation = segmentation.astype(np.int32)
+
+    # Create a binary mask from the segmentation points
+    mask = np.zeros((h, w), dtype=np.uint8)
+    cv2.fillPoly(mask, [segmentation], 255)
+
+    # Set the color and transparency of the mask
+    mask_color = (255, 0, 0)
+    mask_alpha = 0.5
+
+    # Apply the color and transparency to the mask
+    mask = cv2.cvtColor(mask, cv2.COLOR_GRAY2BGR)
+    mask = mask.astype(np.float32) / 255.0
+    mask = mask * mask_color
+    mask = (mask_alpha * mask).astype(np.uint8)
+
+    # Apply the mask to the image
+    masked_image = cv2.addWeighted(mask, 0.5, image, 0.5, 0)
+
+    # Extract the x, y, w, h values from the bounding box
+    x, y, w, h = bbox
+    x_min, y_min, x_max, y_max = int(x), int(y), int(x + w), int(y + h)
+
+    # Draw the bounding box and segmentation mask on the image
+    cv2.rectangle(masked_image, (x_min, y_min), (x_max, y_max), (0, 255, 0), 2)
+
+    # Display the image
+    plt.imshow(cv2.cvtColor(masked_image, cv2.COLOR_BGR2RGB))
+    plt.show()
