@@ -38,11 +38,15 @@ def save_yolo_annotations(bboxes, labels, file_name, save_dir):
     yolo_file.close()
 
 
-def write_lines_to_file(filename, lines):
-    with open(filename, 'w') as f:
-        for line in lines:
+def write_lines_to_file(filepath, data):
+    """
+    writes data to filepath
+    data is a list of lists. where the inner list elements represent a line for the file
+    """
+    with open(filepath, 'w') as f:
+        for lines in data:
+          for line in lines:
             f.write(line + '\n')
-
 
 """
 writing as yolo with segmentation 
