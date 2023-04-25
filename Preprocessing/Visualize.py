@@ -3,6 +3,7 @@ import random
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import cv2
+import numpy as np
 
 
 from yolo_data.LoadingData.load_utils import get_yolo_bboxes_from_txt_file
