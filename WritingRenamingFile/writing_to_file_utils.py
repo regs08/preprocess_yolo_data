@@ -48,6 +48,7 @@ def write_lines_to_file(filename, lines):
 writing as yolo with segmentation 
 """
 
+
 def yolo_format_line(class_label, bbox, segmentation):
     # Extract normalized bounding box coordinates in YOLO format
     #assumes the segmentation is a flattend list [x,y,x1,y1...xn,yn]
@@ -63,15 +64,14 @@ def yolo_format_line(class_label, bbox, segmentation):
     return line
 
 
-def prepare_and_write_to_yolo(class_id, bbox, segmentation, filepath):
+def segmentation_to_yolo_line(class_id, bbox, segmentation):
   """
-  prepares our segmentation, flattens it, and creates our lines to write to the filepath
+  prepares our segmentation, flattens it, and creates our for a binary  mask
   """
   flat_seg = [float(coord) for tup in segmentation for coord in tup]
   lines = []
   lines.append(yolo_format_line(class_id, bbox, flat_seg))
-  write_lines_to_file(filepath, lines)
-  return lines, filepath
+  return lines
 
 """
 folder structures
