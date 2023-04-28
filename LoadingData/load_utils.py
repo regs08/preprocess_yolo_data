@@ -146,6 +146,25 @@ def extract_bounding_boxes(yolo_file):
         bounding_boxes.append((x_center, y_center, width, height))
 
     return bounding_boxes
+"""
+getting dict maps from text 
+"""
+
+
+def read_classes_from_file(filename):
+    """
+    returns id to label and label to id dict
+    :param filename: path to file
+    :return: id to label and label to id dict
+    """
+    id_to_cat_map = {}
+    label_to_id_map = {}
+    with open(filename, 'r') as f:
+        for i, line in enumerate(f):
+            class_name = line.strip()
+            id_to_cat_map[i] = class_name
+            label_to_id_map[class_name] = i
+    return label_to_id_map, id_to_cat_map
 
 
 """
