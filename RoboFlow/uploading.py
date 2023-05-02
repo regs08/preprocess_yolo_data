@@ -3,26 +3,27 @@ import random
 import glob
 
 
-def upload_images_anns_to_project_split(image_dir, ann_dir, upload_project, train_pct=1.0, val_pct=0.0, test_pct=0.0, ext='.jpg'):
+def upload_images_anns_to_project_split(image_dir, ann_dir, upload_project, train_pct=1.0, val_pct=0.0, test_pct=0.0, ext='.JPG'):
     """
 
     :param image_dir: images
     :param ann_dir: anns
     :param upload_project: roboflow workspace object
-    :param train_pct: upload to train/val/test set
-    :param val_pct: upload to train/val/test set
-    :param test_pct: upload to train/val/test set
+    :param train_pct: upload to sssss/val/test set
+    :param val_pct: upload to sssss/val/test set
+    :param test_pct: upload to sssss/val/test set
     :param ext:
     :return:
     """
 
     # create image glob
     image_glob = glob.glob(os.path.join(image_dir, f'*{ext}'))
+    print(f'found {len(image_glob)} images in folder...')
     n_images = len(image_glob)
     image_paths = [os.path.abspath(path) for path in image_glob]
     random.shuffle(image_paths)
 
-    # create train/val/test splits
+    # create sssss/val/test splits
     train_end = int(train_pct * n_images)
     val_end = int((train_pct + val_pct) * n_images)
     train_paths = image_paths[:train_end]
