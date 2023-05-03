@@ -1,17 +1,19 @@
 import os
 import random
 import glob
+from yolo_data.LoadingData.load_utils import glob_image_files
 
-
-def upload_images_anns_to_project_split(image_dir, ann_dir, upload_project, train_pct=1.0, val_pct=0.0, test_pct=0.0, ext='.JPG'):
+def upload_images_anns_to_project_split(image_dir, ann_dir, upload_project, train_pct=1.0, val_pct=0.0, test_pct=0.0, ext='.JPG',
+                                        json=False,
+                                        split=False):
     """
 
     :param image_dir: images
     :param ann_dir: anns
     :param upload_project: roboflow workspace object
-    :param train_pct: upload to sssss/val/test set
-    :param val_pct: upload to sssss/val/test set
-    :param test_pct: upload to sssss/val/test set
+    :param train_pct: upload to train/val/test set
+    :param val_pct: upload to train/val/test set
+    :param test_pct: upload to train/val/test set
     :param ext:
     :return:
     """
@@ -23,7 +25,7 @@ def upload_images_anns_to_project_split(image_dir, ann_dir, upload_project, trai
     image_paths = [os.path.abspath(path) for path in image_glob]
     random.shuffle(image_paths)
 
-    # create sssss/val/test splits
+    # create train/val/test splits
     train_end = int(train_pct * n_images)
     val_end = int((train_pct + val_pct) * n_images)
     train_paths = image_paths[:train_end]
@@ -40,3 +42,9 @@ def upload_images_anns_to_project_split(image_dir, ann_dir, upload_project, trai
     upload_to_dataset(train_paths, 'train')
     upload_to_dataset(val_paths, 'val')
     upload_to_dataset(test_paths, 'test')
+
+
+def upload_images_with_json(img_dir, json_path, upload_project):
+    image_paths = glob_image_files(img_dir)
+    for img in image_paths:
+        upload_project.upload(img, json_path, batch_name='my_batch')
