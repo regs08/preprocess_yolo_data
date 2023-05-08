@@ -2,7 +2,7 @@ from yolo_data.WritingRenamingFile.writing_to_file_utils import insert_string_be
 from yolo_data.LoadingData.load_utils import glob_image_files, get_annotation_path
 from yolo_data.Conversions.convert_yolo_pascal_voc import convert_yolo_to_pascal_voc
 from yolo_data.Preprocessing.CropImage.crop_utils import get_bbox_extreme_with_min_pixel_value
-from yolo_data.LoadingData.load_utils import get_yolo_bboxes_from_txt_file
+from yolo_data.LoadingData.load_utils import get_class_id_bbox_seg_from_yolo
 from yolo_data.Preprocessing.VerticalSplit.utils import get_split_points, save_images_from__list_of_A_dict
 
 import cv2
@@ -13,6 +13,7 @@ import os
 """
 Splitting single images 
 """
+
 def vertical_split_with_A(img, x_min, x_max,y_min, y_max, bboxes, class_labels, format):
     """
     takes in an image and returns a
@@ -30,7 +31,6 @@ def vertical_split_with_A(img, x_min, x_max,y_min, y_max, bboxes, class_labels, 
     #to take up less memory we put as PIL object
 
     vertical_split_image['image'] = Image.fromarray(cv2.cvtColor(vertical_split_image['image'], cv2.COLOR_BGR2RGB))
-
     return vertical_split_image
 
 
@@ -114,7 +114,7 @@ def split_images_in_folder(image_folder, interval, save_folder, ann_folder='',
         #returns our annotations in a yolo foramtted.txt
         ann_path = get_annotation_path(img_path, ann_folder)
         #reading from text file
-        bboxes, class_ns = get_yolo_bboxes_from_txt_file(ann_path)
+        class_ns, bboxes, _ = get_class_id_bbox_seg_from_yolo(ann_path)
 
         # instead of loading in the text file we can just load in bbox extremes here
         if bbox_extremes:
