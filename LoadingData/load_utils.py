@@ -44,7 +44,7 @@ def load_coords_in_pascal_voc_from_yolo_txt_file(txt_path, img_path):
     :param img_path: image path of the corresponding image
     :return:
     """
-    yolo_boxes, class_ns = get_yolo_bboxes_from_txt_file(txt_path)
+    class_ns, yolo_boxes, _  = get_class_id_bbox_seg_from_yolo(txt_path)
     img = cv2.imread(img_path).shape[:2]
 
     #note the switching of height and width
@@ -107,9 +107,9 @@ def get_class_id_bbox_seg_from_yolo(txt_path):
     :return: class_id and bbox or class_id, boox, seg
     """
     lines = read_txt_file(txt_path)
-    yolo_bboxes, class_ns, segs = convert_text_lines_to_yolo_format(lines)
+    yolo_bboxes, class_ids, segs = convert_text_lines_to_yolo_format(lines)
 
-    return yolo_bboxes, class_ns, segs
+    return class_ids, yolo_bboxes, segs
 
 
 def read_txt_file(txt_path):
