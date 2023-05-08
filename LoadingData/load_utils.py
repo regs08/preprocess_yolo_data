@@ -99,11 +99,12 @@ def get_annotation_path(image_path, ann_dir):
 reading from yolo file 
 """
 
-def get_yolo_bboxes_from_txt_file(txt_path):
+
+def get_class_id_bbox_seg_from_yolo(txt_path):
     """
     gets each line as a seperate bbox
     :param txt_file: the text file corresponding to the image
-    :return:
+    :return: class_id and bbox or class_id, boox, seg
     """
     lines = read_txt_file(txt_path)
     yolo_bboxes, class_ns, segs = convert_text_lines_to_yolo_format(lines)
