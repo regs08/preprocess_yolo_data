@@ -106,9 +106,9 @@ def get_yolo_bboxes_from_txt_file(txt_path):
     :return:
     """
     lines = read_txt_file(txt_path)
-    yolo_bboxes, class_ns = convert_text_lines_to_yolo_format(lines)
+    yolo_bboxes, class_ns, segs = convert_text_lines_to_yolo_format(lines)
 
-    return yolo_bboxes, class_ns
+    return yolo_bboxes, class_ns, segs
 
 
 def read_txt_file(txt_path):
@@ -120,20 +120,22 @@ def read_txt_file(txt_path):
 def convert_text_lines_to_yolo_format(lines):
     bboxes = []
     class_ns = []
+    segs = []
     for idx, line in enumerate(lines):
         value = line.split()
-        x = y = w = h = cls = None
         cls = int(value[0])
         x = float(value[1])
         y = float(value[2])
         w = float(value[3])
         h = float(value[4])
-
+        #if we have segmentation data append it
+        if len(line) > 5:
+            segs.append(value[5:])
 
         bboxes.append([x,y,w,h])
         class_ns.append(cls)
 
-    return bboxes, class_ns
+    return bboxes, class_ns, segs
 
 
 def extract_bounding_boxes(yolo_file):
@@ -142,7 +144,7 @@ def extract_bounding_boxes(yolo_file):
 
     bounding_boxes = []
     for line in lines:
-        class_id, x_center, y_center, width, height = map(float, line.split()[1:])
+        class_id, x_center, y_center, width, height = map(float, line.split()[1:5])
         bounding_boxes.append((x_center, y_center, width, height))
 
     return bounding_boxes
