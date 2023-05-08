@@ -131,7 +131,7 @@ def convert_text_lines_to_yolo_format(lines):
         h = float(value[4])
         #if we have segmentation data append it
         if len(line) > 5:
-            segs.append(value[5:])
+            segs.append([float(i) for i in value[5:].split(' ')])
 
         bboxes.append([x,y,w,h])
         class_ns.append(cls)
