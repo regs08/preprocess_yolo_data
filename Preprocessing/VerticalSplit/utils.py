@@ -1,28 +1,32 @@
-import cv2
 import os
 from yolo_data.WritingRenamingFile.writing_to_file_utils import save_yolo_annotations
 
 
-def get_split_points(image, interval):
-    if isinstance(image, str):
-        image = cv2.imread(image)
+def get_split_points(start, end, interval):
+    """
+    getting split points for an image, usually start will be equal to 0 and end
+    will be the images width.
 
-    height, width, _ = image.shape
+    In our case we are starting where the bboxes start and endning where they end.
+    """
+    #start is the minimum value
+    #end is the width of the image gotten from our bbox extreme
 
     # if theres a remainder we subtract the last line
-    num_lines = (width // interval) -1  if (width // interval) > 0 else 0
-    #for the first value of xmin for our splits
-    intervals = [0]
+    num_lines = (end // interval) -1  if (end // interval) > 0 else 0
+    #for the first value of start for our splits
+    intervals = [start]
 
-    # Draw vertical lines at every n number of pixels until step > width
+    # Draw vertical lines at every n number of pixels until step > end
     if num_lines > 0:
-        x = interval
+        x = interval + start
         for i in range(num_lines):
             intervals.append(x)
             x += interval
-
+            if x + interval > end:
+              break
     # appending image with for the last split
-    intervals.append(width)
+    intervals.append(end)
     return intervals
 
 
