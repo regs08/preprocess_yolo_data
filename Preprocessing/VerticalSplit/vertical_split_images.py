@@ -116,7 +116,7 @@ def split_images_in_folder(image_folder, interval, save_folder, ann_folder='',
 
         # instead of loading in the text file we can just load in bbox extremes here
         if bbox_extremes:
-            p_voc_boxes = [convert_yolo_to_pascal_voc(img.shape, box) for box in bboxes]
+            p_voc_boxes = [convert_yolo_to_pascal_voc(img, box) for box in bboxes]
             xmin, y_min, xmax, y_max = get_bbox_extreme_with_min_pixel_value(p_voc_boxes, min_pixel_value)
             split_intervals = get_split_points(xmin, xmax, interval)
             split_images = vertical_split_with_intervals(img=img_path,
