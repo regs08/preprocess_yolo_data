@@ -256,6 +256,3 @@ def split_images_into_batches(source_folder, batch_size, destination_folder):
                 os.rmdir(folder_path)
 
     return dest_folders
-
-folder = "/Users/cole/PycharmProjects/Forgit/yolo_data/Preprocessing/CropImage/test_crop/test_images/save"
-split_folder_into_train_val_test(folder, folder)
