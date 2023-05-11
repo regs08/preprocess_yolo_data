@@ -65,7 +65,7 @@ def vertical_split_with_intervals(img, intervals, bboxes, class_labels, **args):
     for i in range(len(intervals) -1):
         x_min = intervals[i]
         x_max =intervals[i+1]
-        if y_min < 0: y_min = 0
+        if y_min < 0 : y_min = 0
         split_image = vertical_split_with_A(img=img,
                                             x_min=x_min,
                                             x_max=x_max,
@@ -85,9 +85,9 @@ def vertical_split_with_intervals(img, intervals, bboxes, class_labels, **args):
 Splitting images in folder 
 """
 
-
+#note need to update the function for get_split_points function here so that it works
 def split_images_in_folder(image_folder, interval, save_folder, ann_folder='',
-                           save=True, min_boxes=1, bbox_extremes=False, min_pixel_value=1280):
+                          save=True, min_boxes=1, bbox_extremes=False, min_pixel_value=1280):
     """
     takes in an image folder (and ann_folder default is image folder) splits the images vertically using the points provided
     by the interval. note the default values for the y coords is 0 and height of the image
@@ -103,14 +103,12 @@ def split_images_in_folder(image_folder, interval, save_folder, ann_folder='',
     #if anns are in image folder
     if not ann_folder:
         ann_folder=image_folder
-
     image_paths = glob_image_files(image_folder)
     print(f'Splitting {len(image_paths)} image(s) in .../{os.path.basename(image_folder)}')
     for img_path in image_paths:
         img = cv2.imread(img_path)
         #getting the coords for our vertical split for each image 
-        split_intervals = get_split_points(img_path, interval)
-
+        h,w, _ = img.shape
         #returns our annotations in a yolo foramtted.txt
         ann_path = get_annotation_path(img_path, ann_folder)
         #reading from text file
@@ -119,7 +117,8 @@ def split_images_in_folder(image_folder, interval, save_folder, ann_folder='',
         # instead of loading in the text file we can just load in bbox extremes here
         if bbox_extremes:
             p_voc_boxes = [convert_yolo_to_pascal_voc(img.shape, box) for box in bboxes]
-            _, y_min, _, y_max = get_bbox_extreme_with_min_pixel_value(p_voc_boxes, min_pixel_value)
+            xmin, y_min, xmax, y_max = get_bbox_extreme_with_min_pixel_value(p_voc_boxes, min_pixel_value)
+            split_intervals = get_split_points(xmin, xmax, interval)
             split_images = vertical_split_with_intervals(img=img_path,
                                                             bboxes=bboxes,
                                                             class_labels=class_ns,
@@ -128,6 +127,7 @@ def split_images_in_folder(image_folder, interval, save_folder, ann_folder='',
                                                             y_max=y_max)
 
         else:
+            split_intervals = get_split_points(0,w, interval)
             split_images = vertical_split_with_intervals(img=img_path,
                                                          bboxes=bboxes,
                                                          class_labels=class_ns,
