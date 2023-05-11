@@ -1,6 +1,6 @@
 from yolo_data.WritingRenamingFile.writing_to_file_utils import insert_string_before_extension
 from yolo_data.LoadingData.load_utils import glob_image_files, get_annotation_path
-from yolo_data.Conversions.convert_yolo_pascal_voc import convert_yolo_to_pascal_voc
+from yolo_data.yolo2pvoc import convert_yolo_to_pascal_voc
 from yolo_data.Preprocessing.CropImage.crop_utils import get_bbox_extreme_with_min_pixel_value
 from yolo_data.LoadingData.load_utils import get_class_id_bbox_seg_from_yolo
 from yolo_data.Preprocessing.VerticalSplit.utils import get_split_points, save_images_from__list_of_A_dict
