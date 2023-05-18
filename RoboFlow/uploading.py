@@ -47,4 +47,4 @@ def upload_images_anns_to_project_split(image_dir, ann_dir, upload_project, trai
 def upload_images_with_json(img_dir, json_path, upload_project):
     image_paths = glob_image_files(img_dir)
     for img in image_paths:
-        upload_project.upload(img, json_path, batch_name='my_batch')
+        upload_project.upload(img, json_path)
