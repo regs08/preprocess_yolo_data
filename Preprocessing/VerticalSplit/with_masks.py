@@ -9,6 +9,7 @@ from yolo_data.Preprocessing.VerticalSplit.utils import get_split_points
 from yolo_data.yolo2pvoc import convert_yolo_to_pascal_voc
 from yolo_data.Preprocessing.CropImage.crop_utils import get_bbox_extreme_with_min_pixel_value
 
+
 def vertical_split_with_A(img, xmin, xmax, ymin, ymax, bboxes, class_labels, format, masks=None):
     """
     takes in an image and returns a
