@@ -28,7 +28,7 @@ def vertical_split_with_A(img, xmin, xmax, ymin, ymax, bboxes, class_labels, for
     ], bbox_params=A.BboxParams(format=format))
     for i, box in enumerate(bboxes):
         bboxes[i] = [0 if coord < 0 else coord for coord in box]
-
+        print(box)
     if masks:
         vertical_split_image = aug(image=img, bboxes=bboxes, category_ids=class_labels, masks=masks)
     else:
