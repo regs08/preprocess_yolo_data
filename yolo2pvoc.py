@@ -11,4 +11,6 @@ def convert_yolo_to_pascal_voc(yolo_box, image_height, image_width, normilized=T
   box = [xmin, ymin, xmax, ymax]
   box = [0 if coord < 0 else coord for coord in box]
 
+  print(box)
+
   return box
