@@ -98,7 +98,7 @@ def vertical_split_with_intervals(img, intervals, bboxes, class_ids, **args):
     return split_images
 
 
-def split_and_crop_images_with_bbox_extremes(image_folder, ann_folder, format='yolo', split_value=640):
+def split_and_crop_images_with_bbox_extremes(image_folder, ann_folder, format='pascal_voc', split_value=640):
     image_paths = glob_image_files(image_folder)
     out = []
     print(f'Splitting {len(image_paths)} image(s) in .../{os.path.basename(image_folder)}')
@@ -124,7 +124,6 @@ def split_and_crop_images_with_bbox_extremes(image_folder, ann_folder, format='y
         ####
         p_voc_boxes = [convert_yolo_to_pascal_voc(box, h, w) for box in bboxes]
         bbox_extremes = get_bbox_extreme_with_min_pixel_value(p_voc_boxes, split_value)
-        print(bbox_extremes)
         xmin, ymin, xmax, ymax = bbox_extremes
         ####
         ####
