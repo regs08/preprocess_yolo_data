@@ -50,7 +50,7 @@ def vertical_split_with_intervals(img, intervals, bboxes, class_ids, **args):
     e.g out[0][2]['image'] will be the first image that was split and the second split of that image
     """
 
-    format = args.get('format', 'yolo')
+    format = args.get('format', 'pascal_voc')
     ymin = args.get('ymin', 0)
     ymax = args.get('ymax', img.shape[0])
     masks = args.get('masks', None)
@@ -137,7 +137,7 @@ def split_and_crop_images_with_bbox_extremes(image_folder, ann_folder, format='y
         ####
         split_image = vertical_split_with_intervals(img=img_arr,
                                                     intervals=intervals,
-                                                    bboxes=bboxes,
+                                                    bboxes=p_voc_boxes,
                                                     class_ids=class_ids,
                                                     ymin=ymin,
                                                     ymax=ymax,
