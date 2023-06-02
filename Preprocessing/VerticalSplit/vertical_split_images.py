@@ -9,6 +9,8 @@ import cv2
 import albumentations as A
 from PIL import Image
 import os
+from typing import Sequence
+import numpy as np
 
 """
 Splitting single images 
@@ -27,9 +29,26 @@ def vertical_split_with_A(img, x_min, x_max,y_min, y_max, bboxes, class_labels, 
     aug = A.Compose([
         A.Crop(x_min=x_min, x_max=x_max, y_min=y_min, y_max=y_max),
     ], bbox_params=A.BboxParams(format=format, min_visibility=0.3))
-    for i, box in enumerate(bboxes):
-        bboxes[i] = [0 if coord < 0 else coord for coord in box]
-        print(box)
+
+    def check_bbox(bbox: Sequence) -> None:
+        """Check if bbox boundaries are in range 0, 1 and minimums are lesser then maximums"""
+        for name, value in zip(["x_min", "y_min", "x_max", "y_max"], bbox[:4]):
+            if not 0 <= value <= 1 and not np.isclose(value, 0) and not np.isclose(value, 1):
+                raise ValueError(
+                    "Expected {name} !!!!!!!!!!!!!!!!{bbox} "
+                    "to be in the range [0.0, 1.0], got {value}.".format(bbox=bbox, name=name, value=value)
+                )
+        x_min, y_min, x_max, y_max = bbox[:4]
+        if x_max <= x_min:
+            raise ValueError("x_max is less than or equal to x_min for bbox {bbox}.".format(bbox=bbox))
+        if y_max <= y_min:
+            raise ValueError("y_max is less than or equal to y_min for bbox {bbox}.".format(bbox=bbox))
+
+    def check_bboxes(bboxes: Sequence[Sequence]) -> None:
+        """Check if bboxes boundaries are in range 0, 1 and minimums are lesser then maximums"""
+        for bbox in bboxes:
+            check_bbox(bbox)
+    check_bboxes(bboxes)
     vertical_split_image = aug(image=img, bboxes=bboxes, category_ids=class_labels)
     #to take up less memory we put as PIL object
 
