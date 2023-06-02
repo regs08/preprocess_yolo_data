@@ -35,9 +35,10 @@ def get_bbox_extremes(bboxes):
     min_y = min([bbox[1] for bbox in bboxes])
     max_x = max([bbox[2] for bbox in bboxes])
     max_y = max([bbox[3] for bbox in bboxes])
+    box = (min_x, min_y, max_x, max_y)
+    box = [0 if coord < 0 else coord for coord in box]
 
-    return (min_x, min_y, max_x, max_y)
-
+    return box
 
 def get_bbox_extreme_with_min_pixel_value(bboxes, min_pixel_value):
     bbox_extremes = get_bbox_extremes(bboxes)
