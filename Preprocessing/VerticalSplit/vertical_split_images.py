@@ -53,12 +53,7 @@ def vertical_split_with_intervals(img, intervals, bboxes, class_labels, **args):
 
     format = args.get('format', 'yolo')
     y_min = args.get('y_min', 0)
-    y_max = args.get('y_max', img.shape[0])
-    print(img.shape[0])
-    print(img.shape)
-    print(y_max)
     y_max = img.shape[0]
-    print('2nd yamx', str(y_max))
     # getting the "ValueError: Your 'label_fields' are not valid - them must have same names as params in dict" so getting rid
     # adding the label on to the end of the box
 
@@ -121,6 +116,7 @@ def split_images_in_folder(image_folder, interval, save_folder, ann_folder='',
         # instead of loading in the text file we can just load in bbox extremes here
         if bbox_extremes:
             p_voc_boxes = [convert_yolo_to_pascal_voc(yolo_box=box, image_width=w, image_height=h) for box in bboxes]
+            #note ymax is producing wei
             xmin, y_min, xmax, y_max = get_bbox_extreme_with_min_pixel_value(p_voc_boxes, min_pixel_value)
             split_intervals = get_split_points(xmin, xmax, interval)
             split_images = vertical_split_with_intervals(img=img_path,
