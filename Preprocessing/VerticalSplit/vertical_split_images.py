@@ -57,6 +57,8 @@ def vertical_split_with_intervals(img, intervals, bboxes, class_labels, **args):
     print(img.shape[0])
     print(img.shape)
     print(y_max)
+    y_max = img.shape[0]
+    print('2nd yamx', str(y_max))
     # getting the "ValueError: Your 'label_fields' are not valid - them must have same names as params in dict" so getting rid
     # adding the label on to the end of the box
 
