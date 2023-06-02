@@ -54,7 +54,7 @@ def vertical_split_with_intervals(img, intervals, bboxes, class_labels, **args):
     format = args.get('format', 'yolo')
     y_min = args.get('y_min', 0)
     y_max = args.get('y_max', img.shape[0])
-
+    print(y_max)
     # getting the "ValueError: Your 'label_fields' are not valid - them must have same names as params in dict" so getting rid
     # adding the label on to the end of the box
 
