@@ -27,6 +27,9 @@ def vertical_split_with_A(img, x_min, x_max,y_min, y_max, bboxes, class_labels, 
     aug = A.Compose([
         A.Crop(x_min=x_min, x_max=x_max, y_min=y_min, y_max=y_max),
     ], bbox_params=A.BboxParams(format=format, min_visibility=0.3))
+    for i, box in enumerate(bboxes):
+        bboxes[i] = [0 if coord < 0 else coord for coord in box]
+        print(box)
     vertical_split_image = aug(image=img, bboxes=bboxes, category_ids=class_labels)
     #to take up less memory we put as PIL object
 
