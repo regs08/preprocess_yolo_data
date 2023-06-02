@@ -74,7 +74,7 @@ def vertical_split_with_intervals(img, intervals, bboxes, class_labels, **args):
         img = cv2.imread(img)
         add_filename = True
 
-    format = args.get('format', 'yolo')
+    format = args.get('format', 'pascal_voc')
     y_min = args.get('y_min', 0)
     y_max = img.shape[0]
     # getting the "ValueError: Your 'label_fields' are not valid - them must have same names as params in dict" so getting rid
@@ -143,7 +143,7 @@ def split_images_in_folder(image_folder, interval, save_folder, ann_folder='',
             xmin, y_min, xmax, y_max = get_bbox_extreme_with_min_pixel_value(p_voc_boxes, min_pixel_value)
             split_intervals = get_split_points(xmin, xmax, interval)
             split_images = vertical_split_with_intervals(img=img_path,
-                                                            bboxes=bboxes,
+                                                            bboxes=p_voc_boxes,
                                                             class_labels=class_ns,
                                                             intervals=split_intervals,
                                                             y_min=y_min,
