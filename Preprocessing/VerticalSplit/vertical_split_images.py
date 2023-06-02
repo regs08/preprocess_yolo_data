@@ -54,6 +54,8 @@ def vertical_split_with_A(img, x_min, x_max,y_min, y_max, bboxes, class_labels, 
     #to take up less memory we put as PIL object
 
     vertical_split_image['image'] = Image.fromarray(cv2.cvtColor(vertical_split_image['image'], cv2.COLOR_BGR2RGB))
+    image_h, image_w, _ = vertical_split_image['image'].shape
+    vertical_split_image['bboxes'] = [pascal_voc_to_yolo(box, image_w, image_h) for box in vertical_split_image['bboxes'] ]
     return vertical_split_image
 
 
@@ -162,5 +164,9 @@ def split_images_in_folder(image_folder, interval, save_folder, ann_folder='',
 
 
 
+# Convert Pascal_Voc bb to Yolo
+def pascal_voc_to_yolo(box, image_w, image_h):
+    x1, y1, x2,y2 = box[:4]
+    return [((x2 + x1)/(2*image_w)), ((y2 + y1)/(2*image_h)), (x2 - x1)/image_w, (y2 - y1)/image_h]
 
 
