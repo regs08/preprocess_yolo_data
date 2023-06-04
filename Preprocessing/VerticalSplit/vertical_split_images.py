@@ -52,10 +52,12 @@ def vertical_split_with_A(img, x_min, x_max,y_min, y_max, bboxes, class_labels, 
 
     vertical_split_image = aug(image=img, bboxes=bboxes, category_ids=class_labels)
     #to take up less memory we put as PIL object
-
-    vertical_split_image['image'] = Image.fromarray(cv2.cvtColor(vertical_split_image['image'], cv2.COLOR_BGR2RGB))
+    # look here abnns aregetting saved as p_voc
     image_h, image_w, _ = vertical_split_image['image'].shape
     vertical_split_image['bboxes'] = [pascal_voc_to_yolo(box, image_w, image_h) for box in vertical_split_image['bboxes'] ]
+
+    vertical_split_image['image'] = Image.fromarray(cv2.cvtColor(vertical_split_image['image'], cv2.COLOR_BGR2RGB))
+    # prinplit_image['bboxes'])
     return vertical_split_image
 
 
